@@ -40,10 +40,16 @@ def process_frame_and_store(image_bytes: bytes, meta: Optional[Dict[str, Any]] =
     result = engine.process_frame(bgr, meta=meta)
 
     # persist
-    plate_crop = engine._ocr_plate(result.get('plate', {}).get('crop') if result.get('plate') else None)
-    # engine.process_frame already enhanced and cropped; retrieve from engine is not trivial here, so re-crop not available.
+    plate_bbox = result.get('evidence', {}).get('plate_bbox')
+    plate_crop = None
+    if plate_bbox:
+        x1,y1,x2,y2 = [int(v) for v in plate_bbox]
+        h, w = bgr.shape[:2]
+        x1, y1, x2, y2 = max(0,x1), max(0,y1), min(w,x2), min(h,y2)
+        if x2> x1 and y2> y1:
+            plate_crop = bgr[y1:y2, x1:x2].copy()
 
-    paths = save_evidence(bgr, None, result)
+    paths = save_evidence(bgr, plate_crop, result)
 
     session = SessionLocal()
     try:

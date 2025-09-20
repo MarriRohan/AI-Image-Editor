@@ -16,6 +16,7 @@ app.add_middleware(
 
 app.include_router(inference.router, prefix="/inference", tags=["inference"])
 app.include_router(events.router, prefix="/events", tags=["events"])
+app.include_router(challan.router, tags=["challan"])
 
 app.mount("/evidence", StaticFiles(directory="data/evidence"), name="evidence")
 

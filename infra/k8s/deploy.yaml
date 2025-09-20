@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duality-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: duality-api
+  template:
+    metadata:
+      labels:
+        app: duality-api
+    spec:
+      containers:
+        - name: api
+          image: duality/api:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              value: sqlite:///./data/app.db
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: duality-api
+spec:
+  selector:
+    app: duality-api
+  ports:
+    - port: 80
+      targetPort: 8000

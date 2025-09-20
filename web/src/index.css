@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* app globals */
+body { @apply bg-gray-100; }
+
+/* Toast notifications */
+#toast-root { position: fixed; top: 16px; right: 16px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+.app-toast { background: rgba(17, 24, 39, 0.9); color: #fff; padding: 10px 12px; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.2); font-size: 14px; opacity: 0; transform: translateY(-6px); animation: toast-in 180ms ease-out forwards; }
+.app-toast.success { background: rgba(5, 150, 105, 0.95); }
+.app-toast.error { background: rgba(220, 38, 38, 0.95); }
+@keyframes toast-in { to { opacity: 1; transform: translateY(0); } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(-6px); } }

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from api.routers import inference, events
+from api.routers import inference, events, challan
 from api.config import settings
 
 app = FastAPI(title="Duality Traffic Enforcement API")

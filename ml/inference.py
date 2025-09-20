@@ -123,6 +123,7 @@ class InferenceEngine:
                 x1, y1, x2, y2 = map(int, [plate_det.x1, plate_det.y1, plate_det.x2, plate_det.y2])
                 x1, y1, x2, y2 = max(0,x1), max(0,y1), min(w,x2), min(h,y2)
                 plate_crop = bgr[y1:y2, x1:x2].copy()
+                meta['plate_bbox'] = [x1,y1,x2,y2]
 
         if plate_crop is not None:
             plate_read = self._ocr_plate(plate_crop)
@@ -137,6 +138,7 @@ class InferenceEngine:
                 "timestamp_ms": ev.timestamp_ms,
                 "speed_kph": ev.speed_kph,
                 "bboxes": ev.bboxes,
+                "plate_bbox": meta.get("plate_bbox"),
             },
         }
         return out

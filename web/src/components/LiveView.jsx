@@ -10,8 +10,12 @@ export default function LiveView() {
     if (!file) return
     const form = new FormData()
     form.append('file', file)
-    const res = await api.post('/inference/frame', form)
-    setResult(res.data)
+    try {
+      const res = await api.post('/inference/frame', form)
+      setResult(res.data)
+    } catch (e) {
+      setResult({ error: 'Backend not reachable or unauthorized' })
+    }
   }
 
   return (

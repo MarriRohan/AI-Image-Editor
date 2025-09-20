@@ -5,18 +5,26 @@ export default function AdminPanel() {
   const [items, setItems] = useState([])
 
   async function load() {
-    const res = await api.get('/events')
-    setItems(res.data.items)
+    try {
+      const res = await api.get('/events')
+      setItems(res.data.items)
+    } catch (e) {
+      setItems([])
+    }
   }
 
   async function approve(item) {
-    const payload = {
-      violations: [{ type: item.type, score: item.score }],
-      plate: { text: item.plate_text, confidence: item.plate_conf },
-      evidence: item.meta
+    try {
+      const payload = {
+        violations: [{ type: item.type, score: item.score }],
+        plate: { text: item.plate_text, confidence: item.plate_conf },
+        evidence: item.meta
+      }
+      const res = await api.post('/issue-fine', payload)
+      alert(JSON.stringify(res.data))
+    } catch (e) {
+      alert('Failed to issue e-challan (backend not running).')
     }
-    const res = await api.post('/issue-fine', payload)
-    alert(JSON.stringify(res.data))
   }
 
   useEffect(()=>{ load() },[])

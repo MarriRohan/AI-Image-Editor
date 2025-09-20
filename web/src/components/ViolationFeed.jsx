@@ -5,8 +5,12 @@ export default function ViolationFeed() {
   const [items, setItems] = useState([])
 
   async function load(page=1) {
-    const res = await api.get('/events', { params: { page }})
-    setItems(res.data.items)
+    try {
+      const res = await api.get('/events', { params: { page }})
+      setItems(res.data.items)
+    } catch (e) {
+      setItems([])
+    }
   }
 
   useEffect(()=>{ load() },[])
